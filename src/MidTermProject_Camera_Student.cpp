@@ -63,10 +63,11 @@ int main(int argc, const char *argv[])
         DataFrame frame;
         frame.cameraImg = imgGray;
         dataBuffer.push_back(frame);
+
+        // Work 1: Make the normal data buffer to be ring buffer
         if (dataBuffer.size() > dataBufferSize)
         {
-            dataBuffer = vector<DataFrame>(dataBuffer.begin()+1, dataBuffer.end());
-            cout << dataBuffer.size() << endl;
+            dataBuffer = vector<DataFrame>(dataBuffer.end()-dataBufferSize, dataBuffer.end());
         }
 
         //// EOF STUDENT ASSIGNMENT
