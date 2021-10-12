@@ -77,12 +77,12 @@ int main(int argc, const char *argv[])
 
         // extract 2D keypoints from current image
         vector<cv::KeyPoint> keypoints; // create empty feature list for current image
-        string detectorType = "SIFT";
+        string detectorType = "BRISK";
 
         //// STUDENT ASSIGNMENT
         //// TASK MP.2 -> add the following keypoint detectors in file matching2D.cpp and enable string-based selection based on detectorType
         //// -> HARRIS, FAST, BRISK, ORB, AKAZE, SIFT
-        bool bVis = true;
+        bool bVis = false;
         if (detectorType.compare("SHITOMASI") == 0)
         {
             detKeypointsShiTomasi(keypoints, imgGray, bVis);
@@ -105,7 +105,20 @@ int main(int argc, const char *argv[])
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
         {
-            // ...
+            vector<cv::KeyPoint> newKeypoints;
+            for (auto it = keypoints.begin(); it != keypoints.end(); ++it)
+            {
+                float x = it->pt.x;
+                float y = it->pt.y;
+                bool bInX = (vehicleRect.x < x) && (x < vehicleRect.x + vehicleRect.width);
+                bool bInY = (vehicleRect.y < y) && (y < vehicleRect.y + vehicleRect.height);
+                if (bInX && bInY)
+                {
+                    newKeypoints.push_back(*it);
+                }
+            }
+
+            keypoints = newKeypoints;
         }
 
         //// EOF STUDENT ASSIGNMENT
