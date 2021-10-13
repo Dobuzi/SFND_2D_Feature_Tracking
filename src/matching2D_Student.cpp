@@ -30,13 +30,22 @@ void matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vector<cv::Key
     // perform matching task
     if (selectorType.compare("SEL_NN") == 0)
     { // nearest neighbor (best match)
-
         matcher->match(descSource, descRef, matches); // Finds the best match for each descriptor in desc1
     }
     else if (selectorType.compare("SEL_KNN") == 0)
     { // k nearest neighbors (k=2)
+        const int k = 2;
+        vector<vector<cv::DMatch> > knnMatches;
+        matcher->knnMatch(descSource, descRef, knnMatches, k);
 
-        // ...
+        const float ratio_thresh = 0.8f;
+        for (size_t i = 0; i < knnMatches.size(); i++)
+        {
+            if (knnMatches[i][0].distance < ratio_thresh * knnMatches[i][1].distance)
+            {
+                matches.push_back(knnMatches[i][0]);
+            }
+        }
     }
 }
 
