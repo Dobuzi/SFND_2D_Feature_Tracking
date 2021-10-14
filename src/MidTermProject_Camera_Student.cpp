@@ -15,12 +15,15 @@
 
 #include "dataStructures.h"
 #include "matching2D.hpp"
+#include "io.hpp"
 
 using namespace std;
 
 /* MAIN PROGRAM */
 int main(int argc, const char *argv[])
 {
+    map<string, string> args;
+    parseArgs(args, argc, argv);
 
     /* INIT VARIABLES AND DATA STRUCTURES */
 
@@ -38,7 +41,8 @@ int main(int argc, const char *argv[])
     // misc
     int dataBufferSize = 2;       // no. of images which are held in memory (ring buffer) at the same time
     vector<DataFrame> dataBuffer; // list of data frames which are held in memory at the same time
-    bool bVis = false;            // visualize results
+    bool bVisDetector = args["--bVisDetector"].compare("true") == 0 ? true : false; // visualize detector results
+    bool bVisMatcher = args["--bVisMatcher"].compare("true") == 0 ? true : false; // visualize matcher results
 
     /* MAIN LOOP OVER ALL IMAGES */
 
@@ -77,23 +81,23 @@ int main(int argc, const char *argv[])
 
         // extract 2D keypoints from current image
         vector<cv::KeyPoint> keypoints; // create empty feature list for current image
-        string detectorType = "SIFT";
+        string detectorType = args["--detector"]; // SHITOMASI, HARRIS, FAST, BRISK, ORB, AKAZE, SIFT
 
         //// STUDENT ASSIGNMENT
         //// TASK MP.2 -> add the following keypoint detectors in file matching2D.cpp and enable string-based selection based on detectorType
-        //// -> HARRIS, FAST, BRISK, ORB, AKAZE, SIFT
+        //// -> SHITOMASI, HARRIS, FAST, BRISK, ORB, AKAZE, SIFT
         bool bVis = false;
         if (detectorType.compare("SHITOMASI") == 0)
         {
-            detKeypointsShiTomasi(keypoints, imgGray, bVis);
+            detKeypointsShiTomasi(keypoints, imgGray, bVisDetector);
         }
         else if (detectorType.compare("HARRIS") == 0)
         {
-            detKeypointsHarris(keypoints, imgGray, bVis);
+            detKeypointsHarris(keypoints, imgGray, bVisDetector);
         }
         else
         {
-            detKeypointsModern(keypoints, imgGray, detectorType, bVis);
+            detKeypointsModern(keypoints, imgGray, detectorType, bVisDetector);
         }
         //// EOF STUDENT ASSIGNMENT
 
@@ -119,6 +123,7 @@ int main(int argc, const char *argv[])
             }
 
             keypoints = newKeypoints;
+            cout << keypoints.size() << " keypoints on preceding vehicle." << endl;
         }
 
         //// EOF STUDENT ASSIGNMENT
@@ -142,13 +147,12 @@ int main(int argc, const char *argv[])
         cout << "#2 : DETECT KEYPOINTS done" << endl;
 
         /* EXTRACT KEYPOINT DESCRIPTORS */
-
+        string descriptorType = args["--descriptor"]; // BRISK, BRIEF, ORB, FREAK, AKAZE, SIFT
         //// STUDENT ASSIGNMENT
         //// TASK MP.4 -> add the following descriptors in file matching2D.cpp and enable string-based selection based on descriptorType
         //// -> BRIEF, ORB, FREAK, AKAZE, SIFT
 
         cv::Mat descriptors;
-        string descriptorType = "SIFT"; // BRISK, BRIEF, ORB, FREAK, AKAZE, SIFT
         descKeypoints((dataBuffer.end() - 1)->keypoints, (dataBuffer.end() - 1)->cameraImg, descriptors, descriptorType);
         //// EOF STUDENT ASSIGNMENT
 
@@ -163,9 +167,9 @@ int main(int argc, const char *argv[])
             /* MATCH KEYPOINT DESCRIPTORS */
 
             vector<cv::DMatch> matches;
-            string matcherType = "MAT_FLANN";        // MAT_BF, MAT_FLANN
-            string descriptorType = "DES_BINARY"; // DES_BINARY, DES_HOG
-            string selectorType = "SEL_KNN";       // SEL_NN, SEL_KNN
+            string matcherType = args["--matcher"];        // MAT_BF, MAT_FLANN
+            string descriptorType = args["--matchDesc"]; // DES_BINARY, DES_HOG
+            string selectorType = args["--selector"];       // SEL_NN, SEL_KNN
 
             //// STUDENT ASSIGNMENT
             //// TASK MP.5 -> add FLANN matching in file matching2D.cpp
@@ -183,8 +187,7 @@ int main(int argc, const char *argv[])
             cout << "#4 : MATCH KEYPOINT DESCRIPTORS done" << endl;
 
             // visualize matches between current and previous image
-            bVis = true;
-            if (bVis)
+            if (bVisMatcher)
             {
                 cv::Mat matchImg = ((dataBuffer.end() - 1)->cameraImg).clone();
                 cv::drawMatches((dataBuffer.end() - 2)->cameraImg, (dataBuffer.end() - 2)->keypoints,
@@ -199,7 +202,6 @@ int main(int argc, const char *argv[])
                 cout << "Press key to continue to next image" << endl;
                 cv::waitKey(0); // wait for key to be pressed
             }
-            bVis = false;
         }
 
     } // eof loop over all images
