@@ -48,6 +48,8 @@ int main(int argc, const char *argv[])
 
     for (size_t imgIndex = 0; imgIndex <= imgEndIndex - imgStartIndex; imgIndex++)
     {
+        // count time each frame
+        double t = (double)cv::getTickCount();
         /* LOAD IMAGE INTO BUFFER */
 
         // assemble filenames for current index
@@ -123,7 +125,7 @@ int main(int argc, const char *argv[])
             }
 
             keypoints = newKeypoints;
-            cout << keypoints.size() << " keypoints on preceding vehicle." << endl;
+            cout << keypoints.size() << " keypoints, identifier: MP7" << endl;
         }
 
         //// EOF STUDENT ASSIGNMENT
@@ -184,7 +186,10 @@ int main(int argc, const char *argv[])
             // store matches in current data frame
             (dataBuffer.end() - 1)->kptMatches = matches;
 
+            cout << matches.size() << " matches, identifier: MP8" << endl;
             cout << "#4 : MATCH KEYPOINT DESCRIPTORS done" << endl;
+            t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+            cout << 1000 * t / 1.0 << " ms, identifier: MP9" << endl;
 
             // visualize matches between current and previous image
             if (bVisMatcher)

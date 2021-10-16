@@ -1,52 +1,52 @@
 #!/bin/bash
 
-echo "SHITOMASI" > kpts_SHITOMASI.csv
+echo "SHITOMASI" > MP7_SHITOMASI.csv
 ../build/2D_feature_tracking --bVisMatcher false \
 --detector SHITOMASI \
 --descriptor BRISK \
 --matcher MAT_BF \
 --selector SEL_KNN \
-| grep preceding | awk '{print $1}' >> kpts_SHITOMASI.csv
+| grep MP7 | awk '{print $1}' >> MP7_SHITOMASI.csv
 
-echo "FAST" > kpts_FAST.csv
+echo "FAST" > MP7_FAST.csv
 ../build/2D_feature_tracking --bVisMatcher false \
 --detector FAST \
 --descriptor BRISK \
 --matcher MAT_BF \
 --selector SEL_KNN \
-| grep preceding | awk '{print $1}' >> kpts_FAST.csv
+| grep MP7 | awk '{print $1}' >> MP7_FAST.csv
 
-echo "BRISK" > kpts_BRISK.csv
+echo "BRISK" > MP7_BRISK.csv
 ../build/2D_feature_tracking --bVisMatcher false \
 --detector BRISK \
 --descriptor BRISK \
 --matcher MAT_BF \
 --selector SEL_KNN \
-| grep preceding | awk '{print $1}' >> kpts_BRISK.csv
+| grep MP7 | awk '{print $1}' >> MP7_BRISK.csv
 
-echo "ORB" > kpts_ORB.csv
+echo "ORB" > MP7_ORB.csv
 ../build/2D_feature_tracking --bVisMatcher false \
 --detector ORB \
 --descriptor BRISK \
 --matcher MAT_BF \
 --selector SEL_KNN \
-| grep preceding | awk '{print $1}' >> kpts_ORB.csv
+| grep MP7 | awk '{print $1}' >> MP7_ORB.csv
 
-echo "AKAZE" > kpts_AKAZE.csv
+echo "AKAZE" > MP7_AKAZE.csv
 ../build/2D_feature_tracking --bVisMatcher false \
 --detector AKAZE \
 --descriptor AKAZE \
 --matcher MAT_BF \
 --selector SEL_KNN \
-| grep preceding | awk '{print $1}' >> kpts_AKAZE.csv
+| grep MP7 | awk '{print $1}' >> MP7_AKAZE.csv
 
-echo "SIFT" > kpts_SIFT.csv
+echo "SIFT" > MP7_SIFT.csv
 ../build/2D_feature_tracking --bVisMatcher false \
 --detector SIFT \
 --descriptor SIFT \
 --matcher MAT_FLANN \
 --selector SEL_KNN \
-| grep preceding | awk '{print $1}' >> kpts_SIFT.csv
+| grep MP7 | awk '{print $1}' >> MP7_SIFT.csv
 
-./mergecsv.pl kpts_*.csv > result_kpts.csv
-rm kpts_*.csv
+./mergecsv.pl MP7_*.csv > result_MP7.csv
+rm MP7_*.csv
