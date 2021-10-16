@@ -29,19 +29,24 @@
 ## Result
 
 1. Count the number of keypoints
-   <img src="images/MP7_table.png" width=400>
-   <img src="images/MP7_chart.png" width=600>
+
+ <img src="images/MP7_table.png" width=400>
+ <img src="images/MP7_chart.png" width=600>
 
 2. Count the number of matches
-   <img src="images/MP8_table.png" width=800>
-   <img src="images/MP8_chart.png" width=600>
+
+ <img src="images/MP8_table.png" width=800>
+ <img src="images/MP8_chart.png" width=600>
 
 3. Count the runtime of processing each frame
-   <img src="images/MP9_table.png" width=600>
-   <img src="images/MP9_chart.png" width=600>
+
+ <img src="images/MP9_table.png" width=600>
+ <img src="images/MP9_chart.png" width=600>
 
 4. Calculate the score with weight
-   <img src="images/Score.png" width=600>
+
+ <img src="images/Score.png" width=600>
 
 5. Top 3 combinations of detector and descriptor
-   <img src="images/Top3.png" width=400>
+
+ <img src="images/Top3.png" width=400>
