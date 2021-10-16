@@ -48,7 +48,7 @@ int main(int argc, const char *argv[])
 
     for (size_t imgIndex = 0; imgIndex <= imgEndIndex - imgStartIndex; imgIndex++)
     {
-        // count time each frame
+        // count runtime each frame
         double t = (double)cv::getTickCount();
         /* LOAD IMAGE INTO BUFFER */
 
